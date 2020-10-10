@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        html,
+        body,
+        .container {
+            height: 100%;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #login {
+            width: 400px;
+        }
+
+        body{
+            background: url(1.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .alert {
+            margin: 0px 0px 10px 0px;
+            padding: 5px;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='container'>
+        <div class='panel panel-primary' id='login'>
+            <div class='panel-heading'>
+                登录
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="username">用户名:</label>
+                    <input type="text" name="username" placeholder="用户名" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="password">密码:</label>
+                    <input type="text" name="password" placeholder="密码" class="form-control">
+                </div>
+                <div class="alert alert-danger" role="alert">...</div>
+                <a href="register.html">马上注册</a>
+                <button class="btn btn-primary pull-right" id="btn">登录</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="module">
+     import ajax from './ajax.js';
+  var oBtn = document.getElementById("btn");
+  var aInput = document.querySelectorAll(".form-group input");
+  var oAlert = document.querySelector(".alert");
+  oBtn.onclick = function(){
+    ajax({
+      type: 'post',
+      url: 'login.php',
+      data: {
+        username: aInput[0].value,
+        password: aInput[1].value,
+      },
+      success: function(msg){
+        // console.log(msg);
+        var obj = JSON.parse(msg); //JSON.parse (<anonymous>) 返回的字符串不是json格式。
+        if(obj.code){
+          oAlert.className = 'alert alert-danger';
+        }else{
+          oAlert.className = 'alert alert-success';
+        }
+        oAlert.style.display = 'block';
+        oAlert.innerHTML = obj.msg;
+      },
+      error: function(msg){
+        console.log(msg);
+      }
+    })
+  }
+</script>
+
+</html>
